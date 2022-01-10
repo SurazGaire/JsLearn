@@ -63,7 +63,7 @@
         <div class="container">
             <i class="fa fa-search search-overlay__icon" area-hidden="true"></i>
             <input type="text" class="search-term" placeholder="What are you looking for?" id="search-term" autocomplete="off">
-            <i class="fa fa-window-close search-overlay__close" area-hidden="true"></i>
+            <i class="fa fa-window-close search-overlay__close" id="close" area-hidden="true"></i>
         </div>
     </div>
     <div class="container">
