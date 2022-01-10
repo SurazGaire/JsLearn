@@ -3982,21 +3982,18 @@ class MobileMenu {
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-
-
 class Search {
   // Section 1 : describe and create/initiate our object
   constructor() {
-    this.resultsDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#search-overlay__results");
-    console.dir(this.resultsDiv);
-    this.openButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".js-search-trigger");
-    this.closeButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay__close");
-    this.searchOverlay = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay"); // this.searchOverlay = document.getElementsByClassName("search-overlay");
-    // console.log("Hey this is test file");
+    this.body = document.getElementById("body");
+    this.resultsDiv = document.getElementById("search-overlay__results");
+    this.openButton = document.getElementById("js-search-trigger");
+    this.closeButton = document.getElementById("close"); // this.searchOverlay = $(".search-overlay");
 
-    this.searchField = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#search-term');
+    this.searchOverlay = document.querySelector(".search-overlay");
+    console.log(this.searchOverlay);
+    this.searchField = document.getElementById("search-term");
+    console.log(this.searchField.value);
     this.events();
     this.isOverlayOpen = false;
     this.typeTimeout;
@@ -4006,20 +4003,24 @@ class Search {
 
 
   events() {
-    this.openButton.on("click", this.openOverlay.bind(this));
-    this.closeButton.on("click", this.closeOverlay.bind(this));
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on("keydown", this.keyPressDispatcher.bind(this));
-    this.searchField.on("keyup", this.typeLogic.bind(this));
+    this.openButton.addEventListener('click', () => {
+      this.openOverlay();
+    });
+    this.closeButton.addEventListener('click', () => {
+      this.closeOverlay();
+    });
+    document.addEventListener("keydown", () => this.keyPressDispatcher(event));
+    this.searchField.addEventListener("keyup", () => this.typeLogic(event));
   } // Section 2 : methods(function,action)
 
 
   typeLogic() {
-    if (this.searchField.val() != this.previousValue) {
+    if (this.searchField.value != this.previousValue) {
       clearTimeout(this.typeTimeout);
 
-      if (this.searchField.val()) {
+      if (this.searchField.value) {
         if (!this.spinnerTimeout) {
-          this.resultsDiv.html("<div class='spinner-loader'></div>");
+          this.resultsDiv.innerHTML = "<div class='spinner-loader'></div>";
           this.spinnerTimeout = true;
         }
 
@@ -4030,16 +4031,16 @@ class Search {
       }
     }
 
-    this.previousValue = this.searchField.val(); // console.log(this.previousValue);
+    this.previousValue = this.searchField.value; // console.log(this.previousValue);
   }
 
   getResults() {
-    this.resultsDiv.html("This is an imaginary search result");
+    this.resultsDiv.innerHTML = "This is an imaginary search result";
     this.spinnerTimeout = false;
   }
 
   keyPressDispatcher(event) {
-    if (event.keyCode == 83 && !this.isOverlayOpen && !jquery__WEBPACK_IMPORTED_MODULE_0___default()("input, textarea").is(':focus')) {
+    if (event.keyCode == 83 && !this.isOverlayOpen && !$("input, textarea").is(':focus')) {
       this.openOverlay();
     }
 
@@ -4049,14 +4050,14 @@ class Search {
   }
 
   openOverlay() {
-    this.searchOverlay.addClass("search-overlay--active");
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").addClass("body-no-scroll");
+    this.searchOverlay.classList.add("search-overlay--active");
+    this.body.classList.add("body-no-scroll");
     this.isOverlayOpen = true;
   }
 
   closeOverlay() {
-    this.searchOverlay.removeClass("search-overlay--active");
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").removeClass("body-no-scroll");
+    this.searchOverlay.classList.remove("search-overlay--active");
+    this.body.classList.remove("body-no-scroll");
     this.isOverlayOpen = false;
   }
 
@@ -4075,16 +4076,6 @@ class Search {
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
-
-/***/ }),
-
-/***/ "jquery":
-/*!*************************!*\
-  !*** external "jQuery" ***!
-  \*************************/
-/***/ (function(module) {
-
-module.exports = window["jQuery"];
 
 /***/ })
 
@@ -4149,18 +4140,6 @@ module.exports = window["jQuery"];
 /******/ 				}
 /******/ 			}
 /******/ 			return result;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
 /******/ 		};
 /******/ 	}();
 /******/ 	
