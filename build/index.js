@@ -3982,9 +3982,14 @@ class MobileMenu {
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "jquery");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+
 class Search {
   // Section 1 : describe and create/initiate our object
   constructor() {
+    this.addSearchOverlay();
     this.body = document.getElementById("body");
     this.resultsDiv = document.getElementById("search-overlay__results");
     this.openButton = document.getElementById("js-search-trigger");
@@ -4024,9 +4029,9 @@ class Search {
           this.spinnerTimeout = true;
         }
 
-        this.typeTimeout = setTimeout(this.getResults.bind(this), 2000);
+        this.typeTimeout = setTimeout(this.getResults.bind(this), 750);
       } else {
-        this.resultsDiv.html("");
+        this.resultsDiv.innerHTML = "";
         this.spinnerTimeout = false;
       }
     }
@@ -4035,12 +4040,22 @@ class Search {
   }
 
   getResults() {
-    this.resultsDiv.innerHTML = "This is an imaginary search result";
-    this.spinnerTimeout = false;
+    // this.spinnerTimeout = false;
+    jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON('http://localhost/wordpress/wp-json/wp/v2/posts?search=' + this.searchField.value, posts => {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON('http://localhost/wordpress/wp-json/wp/v2/pages?search=' + this.searchField.value, pages => {
+        var combinedResults = posts.concat(pages);
+        this.resultsDiv.innerHTML = `<h2 class="search-overlay__section-title">General Information</h2>
+            ${combinedResults.length ? '<ul class="link-list min-list">' : 'No general information match the search.'}
+            ${combinedResults.map(item => `<li><a href="${item.link}">${item.title.rendered}</a></li>`).join('')}
+            ${combinedResults.length ? '</ul>' : ''}
+            `;
+        this.spinnerTimeout = false;
+      });
+    });
   }
 
   keyPressDispatcher(event) {
-    if (event.keyCode == 83 && !this.isOverlayOpen && !$("input, textarea").is(':focus')) {
+    if (event.keyCode == 83 && !this.isOverlayOpen && !jquery__WEBPACK_IMPORTED_MODULE_0___default()("input, textarea").is(':focus')) {
       this.openOverlay();
     }
 
@@ -4052,6 +4067,9 @@ class Search {
   openOverlay() {
     this.searchOverlay.classList.add("search-overlay--active");
     this.body.classList.add("body-no-scroll");
+    this.searchField.value = '';
+    this.resultsDiv.innerHTML = "";
+    setTimeout(() => this.searchField.focus(), 301);
     this.isOverlayOpen = true;
   }
 
@@ -4059,6 +4077,24 @@ class Search {
     this.searchOverlay.classList.remove("search-overlay--active");
     this.body.classList.remove("body-no-scroll");
     this.isOverlayOpen = false;
+  }
+
+  addSearchOverlay() {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').append(`
+        <div class="search-overlay">    
+        <div class="search-overlay_top">
+            <div class="container">
+                <i class="fa fa-search search-overlay__icon" area-hidden="true"></i>
+                <input type="text" class="search-term" placeholder="What are you looking for?" id="search-term" autocomplete="off">
+                <i class="fa fa-window-close search-overlay__close" id="close" area-hidden="true"></i>
+            </div>
+        </div>
+        <div class="container">
+            <div id="search-overlay__results"></div>
+        </div>
+    
+    </div>
+    `);
   }
 
 }
@@ -4076,6 +4112,16 @@ class Search {
 __webpack_require__.r(__webpack_exports__);
 // extracted by mini-css-extract-plugin
 
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/***/ (function(module) {
+
+module.exports = window["jQuery"];
 
 /***/ })
 
@@ -4140,6 +4186,18 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 				}
 /******/ 			}
 /******/ 			return result;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
 /******/ 		};
 /******/ 	}();
 /******/ 	

@@ -12,4 +12,32 @@ function university_features(){
 }
 
     add_action( 'after_setup_theme', 'university_features');
+
+    //Page Slug Body Class
+function add_slug_body_class( $classes ) {
+	global $post;
+	if ( isset( $post ) ) {
+		$classes[] = $post->post_type . '-' . $post->post_name;
+	}
+	return $classes;
+	}
+add_filter( 'body_class', 'add_slug_body_class' );
+
+
+// Research Post Type
+function aaf_post_types() {
+    register_post_type('research', array(
+        'public' => true,
+        'label' => array(
+            'name' => 'Research',
+            'add_new_item' => 'Add new Research',
+            'edit_item' => 'Edit Research',
+            'all_items' => 'All Researchs',
+            'singular_name' => 'Research'
+        ),
+        'menu-icon' => 'dashicons-media-document'
+
+    ));
+}
+add_action('init','aaf_post_types');
 ?>
